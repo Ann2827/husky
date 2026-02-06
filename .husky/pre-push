@@ -1,9 +1,19 @@
-BRANCH_POINT=$(git merge-base main $(git branch --show-current))
-COUNT=$(git rev-list --count $BRANCH_POINT..HEAD)
-echo "Кол-во коммитов $COUNT"
+CURRENT_BRANCH=$(git branch --show-current)
+ON_ORIGIN=$(git show-ref --verify --quiet refs/remotes/origin/$CURRENT_BRANCH && "true" || "false")
 
-commits=($(git log $(git branch --show-current) --format="%H" --first-parent -$COUNT))
-echo "коммит $commits"
+AHEAD_COMMIT_COUNT=0
+if [ "$ON_ORIGIN" == "true" ]
+then
+    AHEAD_COMMIT_COUNT=$(git rev-list --count @{u}..HEAD)
+else
+    BRANCH_POINT=$(git merge-base main $(git branch --show-current))
+    AHEAD_COMMIT_COUNT=$(git rev-list --count $BRANCH_POINT..HEAD)
+fi
+echo "Кол-во коммитов $AHEAD_COMMIT_COUNT"
+
+
+commits=($(git log $(git branch --show-current) --format="%H" --first-parent -$AHEAD_COMMIT_COUNT))
+echo "коммиты $commits"
 
 need_update="false"
 echo "2"
