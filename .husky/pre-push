@@ -1,0 +1,23 @@
+# Получаем статус только для папки ./backend
+backend_changes=$(git status --porcelain ./backend 2>/dev/null)
+
+# Проверяем, есть ли изменения
+if [ -n "$backend_changes" ]
+then
+    echo "Выполняются действия для изменений в backend..."
+
+    gs1=$(git status)
+
+    cd ./backend
+    npm run generate
+    cd ../
+    
+    gs2=$(git status)
+    if [ "$gs1" != "$gs2" ]
+    then
+        echo "Выполняются действия git..."
+        git add ./backend && git commit -m "Backend changes"
+    fi
+
+    exit 0
+fi
