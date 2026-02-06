@@ -3,21 +3,26 @@ COUNT=$(git rev-list --count $BRANCH_POINT..HEAD)
 echo "Кол-во коммитов $COUNT"
 
 commits=($(git log $(git branch --show-current) --format="%H" --first-parent -$COUNT))
+echo "коммит $commits"
 
-need_update=false
+need_update="false"
+echo "2"
 
 for commit in "${commits[@]}"; do
-    check=$(git show --name-only $commit | grep -q "^backend/")
+    echo "3 $commit"
+    check_commit=$(git show --name-only "$commit" | grep -q "^backend/" && "true" || "false")
+    echo "check $check_commit"
     # git show --name-only 30b1ebd46c73b5d3c6121c594220a68d93d05ef9 | grep -q "^backend/" && echo "Да" || echo "Нет"
 
-    if [ "$check" ]
+    if [ "$check_commit" == "true" ]
     then
-        need_update=true
+        echo "4"
+        need_update="true"
     fi
 done
 echo "Нужно генерить $need_update"
 
-if [ -n "$need_update" ]
+if [ "$need_update" == "true" ]
 then
     echo "Выполняются действия для изменений в backend..."
 
@@ -31,7 +36,7 @@ then
     if [ "$gs1" != "$gs2" ]
     then
         echo "Выполняются действия git..."
-        git add ./backend && git commit -m "Backend changes"
+        git add ./generated/result.txt && git commit -m "Generated changes"
     fi
 
     exit 0
