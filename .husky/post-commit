@@ -4,7 +4,8 @@ COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
 echo "----------post commits $AHEAD_COMMIT_COUNT"
 echo "----------post message $COMMIT_MESSAGE"
 
-if [ "$AHEAD_COMMIT_COUNT" = "1" ] && [ "$COMMIT_MESSAGE" = "Generated changes" ]
+# if [ "$AHEAD_COMMIT_COUNT" = "1" ] && [ "$COMMIT_MESSAGE" = "Generated changes" ]
+if [ "$COMMIT_MESSAGE" = "Generated changes" ]
 then
     echo "----------post push"
     git push --set-upstream origin $(git branch --show-current) --no-verify
