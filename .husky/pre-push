@@ -1,9 +1,39 @@
-# Получаем статус только для папки ./backend
-backend_changes=$(git status --porcelain ./backend/src 2>/dev/null)
-echo "->> $backend_changes ..."
+CURRENT_BRANCH=$(git branch --show-current)
+ON_ORIGIN=$(git show-ref --verify --quiet refs/remotes/origin/$CURRENT_BRANCH && echo "true" || echo "false")
+echo "origin $ON_ORIGIN"
 
-# Проверяем, есть ли изменения
-if [ -n "$backend_changes" ]
+AHEAD_COMMIT_COUNT=0
+if [ "$ON_ORIGIN" = "true" ]
+then
+    AHEAD_COMMIT_COUNT=$(git rev-list --count @{u}..HEAD)
+else
+    BRANCH_POINT=$(git merge-base main $(git branch --show-current))
+    AHEAD_COMMIT_COUNT=$(git rev-list --count $BRANCH_POINT..HEAD)
+fi
+echo "Кол-во коммитов $AHEAD_COMMIT_COUNT"
+
+
+commits=($(git log $(git branch --show-current) --format="%H" --first-parent -$AHEAD_COMMIT_COUNT))
+echo "коммиты $commits"
+
+need_update="false"
+echo "2"
+
+for commit in "${commits[@]}"; do
+    echo "3 $commit"
+    check_commit=$(git show --name-only "$commit" | grep -q "^backend/" && echo "true" || echo "false")
+    echo "check $check_commit"
+    # git show --name-only 30b1ebd46c73b5d3c6121c594220a68d93d05ef9 | grep -q "^backend/" && echo "Да" || echo "Нет"
+
+    if [ "$check_commit" = "true" ]
+    then
+        echo "4"
+        need_update="true"
+    fi
+done
+echo "Нужно генерить $need_update"
+
+if [ "$need_update" = "true" ]
 then
     echo "Выполняются действия для изменений в backend..."
 
@@ -16,9 +46,36 @@ then
     gs2=$(git status)
     if [ "$gs1" != "$gs2" ]
     then
+        # exit 0
         echo "Выполняются действия git..."
-        git add ./backend && git commit -m "Backend changes"
+        # chmod +x ./.husky/action.sh &
+        sleep 2 && git add ./generated/result.txt && git commit -m "Generated changes" &
+        exit 0
+        # exit 1
     fi
-
-    exit 0
 fi
+
+# Получаем статус только для папки ./backend
+# backend_changes=$(git status --porcelain ./backend/src 2>/dev/null)
+# echo "->> $backend_changes ..."
+
+# # Проверяем, есть ли изменения
+# if [ -n "$backend_changes" ]
+# then
+#     echo "Выполняются действия для изменений в backend..."
+
+#     gs1=$(git status)
+
+#     cd ./backend
+#     npm run generate
+#     cd ../
+    
+#     gs2=$(git status)
+#     if [ "$gs1" != "$gs2" ]
+#     then
+#         echo "Выполняются действия git..."
+#         git add ./backend && git commit -m "Backend changes"
+#     fi
+
+#     exit 0
+# fi
