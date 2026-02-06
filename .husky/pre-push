@@ -49,8 +49,6 @@ then
         echo "Выполняются действия git..."
         git add ./generated/result.txt && git commit -m "Generated changes"
     fi
-
-    exit 0
 fi
 
 # Получаем статус только для папки ./backend
