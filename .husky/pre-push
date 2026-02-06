@@ -3,7 +3,7 @@ ON_ORIGIN=$(git show-ref --verify --quiet refs/remotes/origin/$CURRENT_BRANCH &&
 echo "origin $ON_ORIGIN"
 
 AHEAD_COMMIT_COUNT=0
-if [ "$ON_ORIGIN" == "true" ]
+if [ "$ON_ORIGIN" = "true" ]
 then
     AHEAD_COMMIT_COUNT=$(git rev-list --count @{u}..HEAD)
 else
@@ -25,7 +25,7 @@ for commit in "${commits[@]}"; do
     echo "check $check_commit"
     # git show --name-only 30b1ebd46c73b5d3c6121c594220a68d93d05ef9 | grep -q "^backend/" && echo "Да" || echo "Нет"
 
-    if [ "$check_commit" == "true" ]
+    if [ "$check_commit" = "true" ]
     then
         echo "4"
         need_update="true"
@@ -33,7 +33,7 @@ for commit in "${commits[@]}"; do
 done
 echo "Нужно генерить $need_update"
 
-if [ "$need_update" == "true" ]
+if [ "$need_update" = "true" ]
 then
     echo "Выполняются действия для изменений в backend..."
 
