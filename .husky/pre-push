@@ -1,5 +1,6 @@
 # Получаем статус только для папки ./backend
 backend_changes=$(git status --porcelain ./backend/src 2>/dev/null)
+echo "->> ${backend_changes} ..."
 
 # Проверяем, есть ли изменения
 if [ -n "$backend_changes" ]
