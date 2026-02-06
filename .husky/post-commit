@@ -1,6 +1,6 @@
 AHEAD_COMMIT_COUNT=$(git rev-list --count @{u}..HEAD)
 COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
-if [ "$AHEAD_COMMIT_COUNT" == "1" && "$COMMIT_MESSAGE" == "Generated changes" ]
+if [ "$AHEAD_COMMIT_COUNT" == "1" ] && [ "$COMMIT_MESSAGE" == "Generated changes" ]
 then
     git push --set-upstream origin $(git branch --show-current)
 fi
