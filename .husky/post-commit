@@ -9,4 +9,5 @@ if [ "$COMMIT_MESSAGE" = "Generated changes" ]
 then
     echo "----------post push"
     git push --set-upstream origin $(git branch --show-current) --no-verify
+    exit 0
 fi
