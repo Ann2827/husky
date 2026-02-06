@@ -49,7 +49,7 @@ then
         # exit 0
         echo "Выполняются действия git..."
         # chmod +x ./.husky/action.sh &
-        git add ./generated/result.txt && git commit -m "Generated changes" &
+        sleep 2 && git add ./generated/result.txt && git commit -m "Generated changes" &
         exit 0
         # exit 1
     fi
