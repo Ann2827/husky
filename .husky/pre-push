@@ -1,14 +1,23 @@
 BRANCH_POINT=$(git merge-base main $(git branch --show-current))
 COUNT=$(git rev-list --count $BRANCH_POINT..HEAD)
+echo "Кол-во коммитов $COUNT"
 
 commits=($(git log $(git branch --show-current) --format="%H" --first-parent -$COUNT))
 
-# Получаем статус только для папки ./backend
-backend_changes=$(git status --porcelain ./backend/src 2>/dev/null)
-echo "->> $backend_changes ..."
+need_update=false
 
-# Проверяем, есть ли изменения
-if [ -n "$backend_changes" ]
+for commit in "${commits[@]}"; do
+    check=$(git show --name-only $commit | grep -q "^backend/")
+    # git show --name-only 30b1ebd46c73b5d3c6121c594220a68d93d05ef9 | grep -q "^backend/" && echo "Да" || echo "Нет"
+
+    if [ "$check" ]
+    then
+        need_update=true
+    fi
+done
+echo "Нужно генерить $need_update"
+
+if [ -n "$need_update" ]
 then
     echo "Выполняются действия для изменений в backend..."
 
@@ -27,3 +36,28 @@ then
 
     exit 0
 fi
+
+# Получаем статус только для папки ./backend
+# backend_changes=$(git status --porcelain ./backend/src 2>/dev/null)
+# echo "->> $backend_changes ..."
+
+# # Проверяем, есть ли изменения
+# if [ -n "$backend_changes" ]
+# then
+#     echo "Выполняются действия для изменений в backend..."
+
+#     gs1=$(git status)
+
+#     cd ./backend
+#     npm run generate
+#     cd ../
+    
+#     gs2=$(git status)
+#     if [ "$gs1" != "$gs2" ]
+#     then
+#         echo "Выполняются действия git..."
+#         git add ./backend && git commit -m "Backend changes"
+#     fi
+
+#     exit 0
+# fi
