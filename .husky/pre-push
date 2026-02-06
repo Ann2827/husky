@@ -48,7 +48,7 @@ then
     then
         # exit 0
         echo "Выполняются действия git..."
-        ./.husky/action.sh &
+        chmod +x ./.husky/action.sh &
         # git add ./generated/result.txt && git commit -m "Generated changes"
         # exit 1
     fi
