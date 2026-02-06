@@ -1,3 +1,8 @@
+BRANCH_POINT=$(git merge-base main $(git branch --show-current))
+COUNT=$(git rev-list --count $BRANCH_POINT..HEAD)
+
+commits=($(git log $(git branch --show-current) --format="%H" --first-parent -$COUNT))
+
 # Получаем статус только для папки ./backend
 backend_changes=$(git status --porcelain ./backend/src 2>/dev/null)
 echo "->> $backend_changes ..."
