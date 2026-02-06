@@ -48,6 +48,7 @@ then
     then
         echo "Выполняются действия git..."
         git add ./generated/result.txt && git commit -m "Generated changes"
+        exit 1
     fi
 fi
 
