@@ -1,1 +1,12 @@
-# npm test
+echo "Хук проверяет изменения перед коммитом..."
+
+FRONTEND_CHANGES=$(git status --porcelain ./frontend/src 2>/dev/null)
+
+if [ -n "$FRONTEND_CHANGES" ]
+then
+    echo "Обнаружены изменения в папке frontend. Выполняем форматирование..."
+    cd ./frontend
+    npm run prettier
+    cd ../
+    git add ./fontend
+fi

@@ -1,13 +1,11 @@
+echo "Хук проверяет сообщение после коммита..."
+
 AHEAD_COMMIT_COUNT=$(git rev-list --count @{u}..HEAD)
 COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
 
-echo "----------post commits $AHEAD_COMMIT_COUNT"
-echo "----------post message $COMMIT_MESSAGE"
-
-# if [ "$AHEAD_COMMIT_COUNT" = "1" ] && [ "$COMMIT_MESSAGE" = "Generated changes" ]
 if [ "$COMMIT_MESSAGE" = "Generated changes" ]
 then
-    echo "----------post push"
+    echo "Обнаружен автоматический коммит. Отправляем его в origin..."
     git push --set-upstream origin $(git branch --show-current) --no-verify
     exit 0
 fi
