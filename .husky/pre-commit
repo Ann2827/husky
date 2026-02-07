@@ -8,5 +8,5 @@ then
     cd ./frontend
     npm run prettier
     cd ../
-    git add ./fontend
+    git add ./frontend
 fi
