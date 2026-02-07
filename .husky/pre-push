@@ -20,14 +20,14 @@ AHEAD_COMMITS=($(git log $(git branch --show-current) --format="%H" --first-pare
 NEED_GENERATE="false"
 
 for COMMIT in "${AHEAD_COMMITS[@]}"; do
-    HAS_CHANGES_IN_BACKEND=$(git show --name-only "$COMMIT" | grep -q "^backend/" && echo "true" || echo "false")
-    if [ "$HAS_CHANGES_IN_BACKEND" = "true" ]
+    HAS_CHANGES_IN_BACKEND=$(git show --name-only "$COMMIT" | grep -q "^backend/" && echo true || echo false)
+    if [ "$HAS_CHANGES_IN_BACKEND" = true ]
     then
         NEED_GENERATE="true"
     fi
 done
 
-if [ "$NEED_GENERATE" = "true" ]
+if [ "$NEED_GENERATE" = true ]
 then
     echo "Обнаружены изменения в папке backend. Выполнется сборка и перегенерация..."
 
