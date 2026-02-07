@@ -2,10 +2,10 @@ echo "Хук выполняет действия перед отправкой �
 
 PARENT_BRANCH=main # ветка, от которой отпочковываемся и с которой будем сравнивать
 CURRENT_BRANCH=$(git branch --show-current)
-ON_ORIGIN=$(git show-ref --verify --quiet refs/remotes/origin/$CURRENT_BRANCH && echo "true" || echo "false")
+ON_ORIGIN=$(git show-ref --verify --quiet refs/remotes/origin/$CURRENT_BRANCH && echo true || echo false)
 
 AHEAD_COMMIT_COUNT=0
-if [ "$ON_ORIGIN" = "true" ]
+if [ "$ON_ORIGIN" = true ]
 then
     # если ветка опубликована, то считаем отстающие коммиты от нее
     AHEAD_COMMIT_COUNT=$(git rev-list --count @{u}..HEAD)
@@ -27,7 +27,7 @@ for COMMIT in "${AHEAD_COMMITS[@]}"; do
     fi
 done
 
-if [ "$need_update" = "true" ]
+if [ "$NEED_GENERATE" = "true" ]
 then
     echo "Обнаружены изменения в папке backend. Выполнется сборка и перегенерация..."
 
